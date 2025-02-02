@@ -1,11 +1,10 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import config from '../ config'
+import config from '../ config';
 
+// Connect to WebSocket
 export const connectToWebSocket = (username, setStompClient, setMessages, setConnected) => {
-  // Fix here: Replace http:// with wss:// if on HTTPS
-  const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-  const socket = new SockJS(`${protocol}${config.Backend_Api}/ws`);
+  const socket = new SockJS(`${config.Backend_Api}/ws`);
   const client = Stomp.over(socket);
 
   client.connect({}, () => {
@@ -13,43 +12,39 @@ export const connectToWebSocket = (username, setStompClient, setMessages, setCon
     client.subscribe('/topic/public', (payload) => onMessageReceived(payload, setMessages));
     client.send("/app/chat.addUser", {}, JSON.stringify({ sender: username, type: 'JOIN' }));
     setConnected(true);
-  }, onError);
+  }, () => {
+    console.error('Could not connect to WebSocket. Retrying in 5 seconds...');
+    setTimeout(() => connectToWebSocket(username, setStompClient, setMessages, setConnected), 5000);
+  });
 };
 
-const onError = () => {
-  console.error('Could not connect to WebSocket server. Please refresh the page to try again.');
-};
-
+// Fetch current time from API
 const fetchCurrentTime = async () => {
   try {
     const response = await fetch(`${config.Backend_Api}/time`);
     const data = await response.json();
-    return data;  // "2025-02-02T15:47:07.656090481" style
+    if (!data) throw new Error("Invalid time response");
+    return formatTime(data);
   } catch (error) {
     console.error('Error fetching time:', error);
-    return new Date().toISOString(); 
+    return formatTime(new Date().toISOString()); // Fallback to system time
   }
 };
 
-
-
+// Format time as HH:mm
 const formatTime = (timestamp) => {
   const date = new Date(timestamp);
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return isNaN(date.getTime()) ? "00:00" : date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
+// Handle received messages
 const onMessageReceived = async (payload, setMessages) => {
   const message = JSON.parse(payload.body);
-  
-  const currentTime = await fetchCurrentTime();
-
-  
-  message.time = formatTime(currentTime);
-
-  
+  message.time = await fetchCurrentTime(); // Add formatted time to message
   setMessages((prevMessages) => [...prevMessages, message]);
 };
 
+// Send a message
 export const sendMessage = (messageContent, stompClient, username) => {
   if (messageContent && stompClient) {
     const chatMessage = { sender: username, content: messageContent, type: 'CHAT' };

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
-
+@CrossOrigin(origins = "http://localhost:5173") // Allow frontend access
 @Controller
 public class ChatController {
 
