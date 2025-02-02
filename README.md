@@ -1,6 +1,4 @@
-# Real-Time Chat Application with Spring Boot and React
 
-This project is a full-stack real-time chat application built using Spring Boot for the backend and React for the frontend. It enables users to join chat rooms, send messages, and receive real-time updates through WebSocket communication.
 # Real-Time Chat Application with Spring Boot and React
 
 This project is a full-stack real-time chat application built using Spring Boot for the backend and React for the frontend. It enables users to join chat rooms, send messages, and receive real-time updates through WebSocket communication.
