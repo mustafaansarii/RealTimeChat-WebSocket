@@ -1,9 +1,11 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import config from '../ config'
+import config from '../config';
 
 export const connectToWebSocket = (username, setStompClient, setMessages, setConnected) => {
-  const socket = new SockJS(`${config.Backend_Api}/ws`);  // Fix here
+  // Fix here: Replace http:// with wss:// if on HTTPS
+  const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+  const socket = new SockJS(`${protocol}${config.Backend_Api}/ws`);
   const client = Stomp.over(socket);
 
   client.connect({}, () => {
@@ -20,7 +22,7 @@ const onError = () => {
 
 const fetchCurrentTime = async () => {
   try {
-    const response = await fetch(`${config.Backend_Api}/time`);  // Fix here
+    const response = await fetch(`${config.Backend_Api}/time`);
     const data = await response.json();
     return data;  // "2025-02-02T15:47:07.656090481" style
   } catch (error) {
