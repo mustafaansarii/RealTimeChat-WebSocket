@@ -1,8 +1,4 @@
-# Mustafansarii Realtime Chat (WebSocket)
-
-A real-time chat application built using WebSocket for seamless communication. The project consists of a frontend built with React (Vite) and a backend implemented in Spring Boot.
-
-# Mustafansarii Realtime Chat (WebSocket)
+# Realtime Chat (WebSocket)
 
 A real-time chat application built using WebSocket for seamless communication. The project consists of a frontend built with React (Vite) and a backend implemented in Spring Boot.
 
@@ -88,8 +84,6 @@ docker-compose up --build
 ## Contribution
 Feel free to fork the repository, create a feature branch, and submit a pull request!
 
-## License
-This project is licensed under the MIT License.
 
 ## Contact
 For any queries, reach out at mustafaansari@mail.com.
