@@ -1,6 +1,6 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import config from '../config';
+import config from '../ config'
 
 export const connectToWebSocket = (username, setStompClient, setMessages, setConnected) => {
   // Fix here: Replace http:// with wss:// if on HTTPS
