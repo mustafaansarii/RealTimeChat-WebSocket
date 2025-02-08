@@ -1,0 +1,19 @@
+name: Socials API Health Check
+
+on:
+  schedule:
+    - cron: '*/1 * * * *'  # Runs every minute
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  check-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Socials API Health
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://user-auth-imui.onrender.com/)
+          if [ "$response" -eq 200 ]; then
+            echo "Socials API is up and running!"
+          else
+            echo "Socials API returned status code $response"
+          fi
