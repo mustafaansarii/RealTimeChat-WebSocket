@@ -3,14 +3,48 @@ import requests
 from flask_cors import CORS
 import sqlite3
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_socketio import SocketIO, emit, join_room, leave_room, close_room
 from functools import wraps
 from dotenv import load_dotenv
 import os
+from init_db import init_db
 
 # Load environment variables
 load_dotenv()
+
+# Function to check for inactive rooms and messages
+def check_inactive_data():
+    conn = get_db()
+    cur = conn.cursor()
+    try:
+        # Check for any messages in last 24 hours
+        cur.execute("""
+            SELECT COUNT(*) as count FROM messages 
+            WHERE sent_at > datetime('now', '-1 day')
+        """)
+        message_count = cur.fetchone()[0]
+
+        # Check for any active rooms with participants
+        cur.execute("""
+            SELECT COUNT(*) as count FROM room_participants
+            WHERE joined_at > datetime('now', '-1 day')
+        """)
+        active_rooms = cur.fetchone()[0]
+
+        # If no recent activity, reinitialize database
+        if message_count == 0 and active_rooms == 0:
+            conn.close()
+            init_db()
+            return True
+        return False
+    except sqlite3.Error:
+        return False
+    finally:
+        conn.close()
+
+# Check and reinitialize if needed
+check_inactive_data()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
@@ -33,37 +67,7 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
-# Create tables if they don't exist
-def init_db():
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute('''
-        CREATE TABLE IF NOT EXISTS rooms (
-            room_id TEXT PRIMARY KEY
-        )
-    ''')
-    cur.execute('''
-        CREATE TABLE IF NOT EXISTS room_participants (
-            room_id TEXT,
-            participant TEXT,
-            FOREIGN KEY (room_id) REFERENCES rooms (room_id)
-        )
-    ''')
-    cur.execute('''
-        CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            room_id TEXT,
-            sender TEXT,
-            message TEXT,
-            sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (room_id) REFERENCES rooms (room_id)
-        )
-    ''')
-    conn.commit()
-    conn.close()
 
-# Initialize database tables
-init_db()
 
 @app.route("/")
 def home():
