@@ -1,4 +1,4 @@
-name: Socials API Health Check
+name: Backend API Health Check
 
 on:
   schedule:
