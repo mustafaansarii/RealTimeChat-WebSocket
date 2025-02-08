@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Clone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            min-height: 100vh;
+        }
+        .nav-custom {
+            background-color: #128C7E;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #e0e0e0 !important;
+            transform: translateY(-1px);
+        }
+        .nav-link i {
+            margin-right: 5px;
+        }
+        .nav-link.active {
+            font-weight: bold;
+            border-bottom: 2px solid white;
+        }
+        .welcome-section {
+            text-align: center;
+            padding: 40px 0;
+            color: #075E54;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-title {
+            color: #075E54;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #128C7E;
+            border: none;
+            padding: 10px 25px;
+        }
+        .btn-primary:hover {
+            background-color: #075E54;
+        }
+        .btn-success {
+            background-color: #25D366;
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #128C7E;
+        }
+        .input-group .form-control {
+            border-radius: 10px 0 0 10px;
+            border: 2px solid #e0e0e0;
+        }
+        .input-group .btn {
+            border-radius: 0 10px 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg nav-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fab fa-whatsapp me-2"></i>Chat App
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto" id="nav-items">
+                    <!-- Login/Signup or Logout will be dynamically added here -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h1 class="display-4">Welcome{% if fullname %}, {{ fullname }}{% endif %}!</h1>
+            <p class="lead text-muted">Connect and chat with people around the world</p>
+        </div>
+        
+        <div id="roomSection" style="display: none;">
+            <div class="row justify-content-center g-4">
+                <div class="col-md-5">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-5">
+                            <i class="fas fa-plus-circle fa-3x mb-3" style="color: #128C7E"></i>
+                            <h5 class="card-title">Create New Room</h5>
+                            <p class="card-text text-muted mb-4">Start a new chat room and invite others to join</p>
+                            <button class="btn btn-primary btn-lg" id="createRoomBtn">Create Room</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-5">
+                            <i class="fas fa-door-open fa-3x mb-3" style="color: #25D366"></i>
+                            <h5 class="card-title">Join Existing Room</h5>
+                            <p class="card-text text-muted mb-4">Enter a room ID to join an existing chat</p>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-lg" id="roomIdInput" placeholder="Enter Room ID">
+                                <button class="btn btn-success btn-lg" id="joinRoomByIdBtn">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const jwtData = localStorage.getItem("jwt");
+            const navItems = document.getElementById("nav-items");
+            const roomSection = document.getElementById("roomSection");
+
+            function checkLoginStatus() {
+                if (jwtData) {
+                    // User is logged in
+                    navItems.innerHTML = `
+                        <li class="nav-item">
+                            <a class="nav-link" href="/profile">
+                                <i class="fas fa-user-circle me-1"></i>My Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout" id="logout">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </a>
+                        </li>
+                    `;
+                    roomSection.style.display = "block";
+
+                    document.getElementById("logout").addEventListener("click", function (e) {
+                        e.preventDefault();
+                        localStorage.removeItem("jwt");
+                        window.location.href = "/logout";
+                    });
+
+                    // Set up room creation functionality
+                    document.getElementById("createRoomBtn").addEventListener("click", function() {
+                        fetch("/create_room", {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${jwtData}`
+                            },
+                            body: JSON.stringify({ display_name: "Anonymous" }),
+                            credentials: "include"
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status) {
+                                window.location.href = `/room/${data.room_id}`;
+                            }
+                        });
+                    });
+
+                    // Set up room joining functionality
+                    document.getElementById("joinRoomByIdBtn").addEventListener("click", function() {
+                        const roomId = document.getElementById("roomIdInput").value.trim();
+                        if (!roomId) {
+                            alert("Please enter a room ID");
+                            return;
+                        }
+                        window.location.href = `/room/${roomId}`;
+                    });
+
+                    // Send JWT to server
+                    fetch('/receive_jwt', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${jwtData}`
+                        },
+                        body: JSON.stringify({ jwt: jwtData }),
+                        credentials: 'include'
+                    });
+                } else {
+                    // User is not logged in
+                    navItems.innerHTML = `
+                        <li class="nav-item">
+                            <a class="nav-link" href="/signin">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/signup">
+                                <i class="fas fa-user-plus me-1"></i>Signup
+                            </a>
+                        </li>
+                    `;
+                    roomSection.style.display = "none";
+                }
+            }
+
+            // Initial check
+            checkLoginStatus();
+
+            // Check login status periodically
+            setInterval(checkLoginStatus, 5000);
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,14 +1,14 @@
-# Use a base image with OpenJDK
+# Use OpenJDK 17 as the base image
 FROM openjdk:17-jdk-slim
 
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy the Spring Boot JAR file into the container
-COPY target/chat-application-0.0.1-SNAPSHOT.jar /app/chat-application.jar
+# Copy the JAR file from the target directory into the container
+COPY target/chat-application-0.0.1-SNAPSHOT.jar app.jar
 
-# Expose the port the application will run on
+# Expose the application port (change if your Spring Boot app runs on a different port)
 EXPOSE 8080
 
-# Command to run the application
-ENTRYPOINT ["java", "-jar", "chat-application.jar"]
+# Run the JAR file
+ENTRYPOINT ["java", "-jar", "app.jar"]

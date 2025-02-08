@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            background-color: #e4e1de;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f1f1f1;
+        }
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .message {
+            margin: 10px 0;
+            width: fit-content;
+            max-width: 95%;
+            position: relative;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message-sent {
+            background-color: #dcf8c6;
+            margin-left: auto;
+            border-radius: 15px 0 15px 15px;
+            padding: 12px 18px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .message-received {
+            background-color: white;
+            margin-right: auto;
+            border-radius: 0 15px 15px 15px;
+            padding: 12px 18px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .chat-header {
+            background-color: #ffffff;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .message-input {
+            background-color: white;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .message-input form {
+            display: flex;
+            gap: 15px;
+        }
+        .message-input input {
+            border-radius: 25px;
+            padding: 12px 20px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        .message-input input:focus {
+            box-shadow: 0 0 0 2px rgba(0,128,105,0.2);
+            border-color: #008069;
+        }
+        .message-input button {
+            width: 45px;
+            height: 45px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #008069;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .message-input button:hover {
+            background-color: #006653;
+            transform: scale(1.05);
+        }
+        .nav-custom {
+            background-color: #008069;
+            width: 100%;
+            margin: 0;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-custom .navbar-brand, .nav-custom .nav-link {
+            color: white !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .nav-custom .nav-link:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+        .message-time {
+            font-size: 0.75rem;
+            color: #667781;
+            margin-top: 5px;
+            text-align: right;
+        }
+        .message-sender {
+            font-weight: bold;
+            color: #1fa855;
+            margin-bottom: 3px;
+            font-size: 0.9rem;
+        }
+        .message-sent .message-sender {
+            text-align: right;
+        }
+        .message-received .message-sender {
+            text-align: left;
+        }
+        .exit-room-btn {
+            background-color: #dc3545;
+            color: white !important;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        .exit-room-btn:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+        .status-message {
+            text-align: center;
+            color: #666;
+            background-color: rgba(255,255,255,0.9);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin: 15px auto;
+            width: fit-content;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+        }
+        .room-id-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .room-id-container:hover {
+            background: #f0f0f0;
+        }
+        .copy-icon {
+            cursor: pointer;
+            color: #008069;
+            transition: all 0.2s ease;
+            padding: 8px;
+            border-radius: 50%;
+        }
+        .copy-icon:hover {
+            color: #006653;
+            transform: scale(1.1);
+            background-color: rgba(0,128,105,0.1);
+        }
+        .container-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            margin: 80px auto 100px;  /* Added top and bottom margin for fixed nav and input */
+            position: relative;
+            padding: 0 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        @media (max-width: 1200px) {
+            .chat-container,
+            .chat-header,
+            .message-input {
+                max-width: 100%;
+                border-radius: 0;
+            }
+            .container-wrapper {
+                padding: 0;
+                margin: 70px auto 90px;
+            }
+        }
+        @media (max-width: 768px) {
+            .message {
+                max-width: 90%;
+            }
+            .message-input {
+                padding: 15px;
+            }
+            .chat-header {
+                padding: 10px;
+            }
+            .nav-inner {
+                padding: 0 10px;
+            }
+            .message-input input {
+                padding: 10px 15px;
+            }
+            .message-input button {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg nav-custom">
+        <div class="nav-inner">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-comments me-2"></i>Anonymous Chat App
+            </a>
+            <div class="d-flex align-items-center">
+                <a class="nav-link me-3" href="/"><i class="fas fa-home me-1"></i>Home</a>
+                <button class="nav-link exit-room-btn me-3" id="exitRoom">
+                    <i class="fas fa-door-open me-1"></i>Exit Room
+                </button>
+                <div id="authButtons">
+                    <!-- Auth buttons will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Name Input Modal -->
+    <div class="modal fade" id="nameModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enter Your Name</h5>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="nameInput" class="form-control" placeholder="Enter your name">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveName">Join Chat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-wrapper">
+        <div class="chat-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="room-id-container">
+                    <h5 class="mb-0">Room: {{ room.room_id }}</h5>
+                    <i class="fas fa-copy copy-icon" onclick="copyRoomId('{{ room.room_id }}')" title="Copy Room ID"></i>
+                </div>
+            </div>
+        </div>
+        <div class="chat-container" id="chatContainer">
+            {% for message in messages %}
+            <div class="message {% if message.sender == current_user %}message-sent{% else %}message-received{% endif %}">
+                <div class="message-sender">{{ message.participant }}</div>
+                <div class="message-content">{{ message.message }}</div>
+                <div class="message-time">
+                    {{ message.sent_at }}
+                    {% if message.sender == current_user %}
+                    <i class="fas fa-check-double ms-1 text-primary"></i>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="message-input">
+            <form id="messageForm" class="d-flex gap-2">
+                <input type="text" id="messageInput" class="form-control" placeholder="Type a message">
+                <button type="submit" class="btn btn-success rounded-circle">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        // Check if user is logged in
+        const token = localStorage.getItem("jwt");
+        const authButtons = document.getElementById("authButtons");
+        
+        if (!token) {
+            window.location.href = "/signin";
+        } else {
+            // Add logout button if user is logged in
+            authButtons.innerHTML = `
+                <a class="nav-link" href="#" id="logout">
+                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                </a>
+            `;
+        }
+
+        function copyRoomId(roomId) {
+            navigator.clipboard.writeText(roomId).then(() => {
+                alert('Room ID copied to clipboard!');
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const messageForm = document.getElementById("messageForm");
+            const messageInput = document.getElementById("messageInput");
+            const chatContainer = document.getElementById("chatContainer");
+            const roomId = "{{ room.room_id }}";
+            let username = localStorage.getItem("chatUsername");
+
+            // Only show name modal if username is not stored
+            if (!username) {
+                const nameModal = new bootstrap.Modal(document.getElementById('nameModal'));
+                nameModal.show();
+
+                document.getElementById('saveName').addEventListener('click', function() {
+                    username = document.getElementById('nameInput').value.trim();
+                    if (username) {
+                        localStorage.setItem("chatUsername", username);
+                        nameModal.hide();
+                        initializeChat();
+                    }
+                });
+            } else {
+                initializeChat();
+            }
+
+            function initializeChat() {
+                const socket = io();
+
+                socket.emit('join', {room: roomId, username: username});
+
+                socket.on('message', function(data) {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `message ${data.username === username ? 'message-sent' : 'message-received'}`;
+                    messageDiv.innerHTML = `
+                        <div class="message-sender">${data.username}</div>
+                        <div class="message-content">${data.message}</div>
+                        <div class="message-time">
+                            ${new Date().toLocaleString()}
+                            ${data.username === username ? '<i class="fas fa-check-double ms-1 text-primary"></i>' : ''}
+                        </div>
+                    `;
+                    chatContainer.appendChild(messageDiv);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                });
+
+                socket.on('status', function(data) {
+                    const statusDiv = document.createElement('div');
+                    statusDiv.className = 'status-message';
+                    statusDiv.textContent = data.msg;
+                    chatContainer.appendChild(statusDiv);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                });
+
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                messageForm.addEventListener("submit", function(e) {
+                    e.preventDefault();
+                    const message = messageInput.value.trim();
+                    if (!message) return;
+
+                    socket.emit('message', {
+                        room: roomId,
+                        message: message,
+                        username: username
+                    });
+
+                    messageInput.value = "";
+                });
+
+                document.getElementById("exitRoom").addEventListener("click", function() {
+                    socket.emit('leave', {room: roomId, username: username});
+                    window.location.href = "/";
+                });
+
+                document.getElementById("logout").addEventListener("click", function() {
+                    socket.emit('leave', {room: roomId, username: username});
+                    localStorage.removeItem("jwt");
+                    localStorage.removeItem("chatUsername");
+                    window.location.href = "/signin";
+                });
+
+                window.addEventListener('beforeunload', function() {
+                    socket.emit('leave', {room: roomId, username: username});
+                });
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

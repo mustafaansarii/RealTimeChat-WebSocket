@@ -1,17 +1,18 @@
-# Set the application name
-spring.application.name=chat-application
+spring:
+  main:
+    allow-bean-definition-overriding: true
 
-# Frontend URL configuration
-frontendUrl=http://localhost:5173
+  application:
+    name: chat-application
 
-# PostgreSQL Connection Configuration with the correct JDBC URL prefix
-spring.datasource.url=jdbc:postgresql://neondb_owner:npg_8qXA1hWgEzCJ@ep-late-sunset-a8mzvpqs-pooler.eastus2.azure.neon.tech/ChatApp?sslmode=require
-spring.datasource.driver-class-name=org.postgresql.Driver
+  datasource:
+    url: ${DATABASE_URL}
+    driver-class-name: org.postgresql.Driver
+    platform: postgres
+    show-sql: true
 
-# JPA Configuration (for Hibernate)
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.hibernate.ddl-auto=update  # Correct value without comments
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
-
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
