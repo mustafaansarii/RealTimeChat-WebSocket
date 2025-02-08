@@ -11,20 +11,9 @@ jobs:
     steps:
       - name: Check Socials API Health
         run: |
-          urls=("https://user-auth-imui.onrender.com" "https://realchatapplicaton.onrender.com")
-          status=0  # Track failure status
-
-          for url in "${urls[@]}"; do
-            (
-              response=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-              if [ "$response" -eq 200 ]; then
-                echo "✅ $url is UP"
-              else
-                echo "❌ $url is DOWN (HTTP $response)"
-                status=1  # Mark failure
-              fi
-            ) &
-          done
-
-          wait  # Ensure all checks complete
-          exit $status  # Automatically fail if any API is down
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://realchatapplicaton.onrender.com)
+          if [ "$response" -eq 200 ]; then
+            echo "Socials API is up and running!"
+          else
+            echo "Socials API returned status code $response"
+          fi
