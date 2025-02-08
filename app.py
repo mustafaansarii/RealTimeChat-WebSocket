@@ -8,7 +8,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room, close_room
 from functools import wraps
 from dotenv import load_dotenv
 import os
-from init_db import init_db
+from init_db import init_db,get_db
 
 # Load environment variables
 load_dotenv()
