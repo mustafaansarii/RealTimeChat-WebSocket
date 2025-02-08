@@ -5,32 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="784f3792-950b-4cbc-b349-3f291f9524ea" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chat-app-client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../chat-app-client/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chat-app-client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../chat-app-client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chat-app-client/src/ config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../chat-app-client/src/ config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chat-app-client/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../chat-app-client/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chat-app-client/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../chat-app-client/src/main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/chat/chat/application/ChatApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/chat/chat/application/ChatApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/chat/chat/application/config/JacksonConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/chat/chat/application/config/WebSocketConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/chat/chat/application/config/config.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/chat/chat/application/controller/ChatController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/chat/chat/application/controller/WebSocketEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/chat/chat/application/model/ChatMessage.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/main.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/aws.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/chat application.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/chat/chat/application/config/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/chat/chat/application/config/ApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/chat-application-0.0.1-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/chat-application-0.0.1-SNAPSHOT.jar.original" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/ChatApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/Controller/AuthController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/Controller/UserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/Model/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/Repository/UserRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/Request/LoginRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/Response/AuthResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/Service/CustomUserServiceIMPL.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/Service/UserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/Service/UserServiceIMPL.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/config/ApplicationConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/config/JwtConstant.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/config/JwtProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/chat/chat/application/config/JwtTokenValidator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/chat/chat/application/ChatApplicationTests.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

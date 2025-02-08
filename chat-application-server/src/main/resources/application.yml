@@ -16,3 +16,12 @@ spring:
       ddl-auto: update
     properties:
       hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+cors:
+  allowed-origins:
+    - http://localhost:5173
+    - http://localhost:5000
+    - ${Local_URL}
+    - ${live_URL}
+    - ${flask_URL}
